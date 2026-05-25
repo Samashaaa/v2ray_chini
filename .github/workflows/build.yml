@@ -1,0 +1,24 @@
+name: Build Configs
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Fetch configs
+        run: |
+          mkdir -p Config
+          echo "This is your config file" > Config/vless.txt
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Config/
+          git commit -m "Auto update configs" || echo "No changes to commit"
+          git push
